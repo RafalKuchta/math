@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        /*    Okręslamy font w html, z któego inne elementy dziedziczą*/
+        html {
+            font-family: arial;
+        }
+
+        /*Stylujemy przycisk*/
+        button {
+            display: block;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 3px solid black;
+            padding: 10px 20px;
+            font-size: 20px;
+
+            transition: .3s;
+        }
+
+        button:hover {
+            background-color: #000;
+            color: white;
+        }
+
+        /*    Stylujemy diva i liczbe w nim, czyli widok naszejwylosowanej kulki*/
+        div {
+            float: left;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: cornflowerblue;
+            margin: 10px;
+            line-height: 60px;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <button>Losuj</button>
+
+    <script>
+        //    Tablica przechowująca wyniki
+        const result = [];
+
+        //    funkcja odpowiedzialna za losowanie i umieszczanie liczby na stronie internetowej
+        const losowanie = function () {
+
+            // sprawdzenie czy jest już 6 liczb (w tablicy), jeśli tak zakończenie funkcji w tym momencie
+            if (result.length === 6) return;
+
+            //losowanie liczny - metoda Math.random zwraca od 0 do 1 [0,1). Jeśli pomnożymy to przez 49 to zwraca od 0 do 48.999999 jęsli dodamy 1 to od 1 do 49.9999. Teraz za pomocą Math.floor usuwamy to co po przecinku czyli mamy liczby całkowite od 1 do 49 (1,2,3...)
+            const wynikLosowania = Math.floor(Math.random() * 49 + 1);
+
+            //Sprawdzenie czy taka liczba nie zostałą wylosowana wcześniej to znaczy nie znajduje się w tablicy result. Przy pierwszym wywołaniu tablica jest pusta, potem ją uzupełniamy (dalszy kod funkcji)
+            for (let i = 0; i < result.length; i++) {
+                //instrukcja warunkowa - sprawdzamy nowo wylosowaną liczbę z tymi, które są już w tablicy
+                if (wynikLosowania === result[i]) {
+                    //jaśli wylosowana liczba jest już w tablicy to kończymy tą funkcję (losowanie) i wywołujemy ją ponownie, więc losujemy ponownie
+                    return losowanie()
+                }
+            }
+            //tworzymy element div, ktory dodamy do dokumsntu (strony)
+            const div = document.createElement("div");
+            //przypisujemy do stworzonego diva, między znaczniki treść w postaci wylosowanej liczby (znajdującej się w zmiennej wynikLosowania)
+            div.textContent = wynikLosowania;
+
+            //dodajemy do tablicy wyników (result)
+            result.push(wynikLosowania);
+
+            //dodajemy div do elementu body
+            document.body.appendChild(div);
+        }
+
+
+        //Pobranie przycisku do zmiennej, dzięki temu możemy na nim pracować
+        const button = document.querySelector("button");
+
+        //nasłuchiwanie na zdarzenie w tym wypadku klika przycisku. Po kliku ma wywołać się funkcja losowanie (po kązdym kliku)
+        button.addEventListener("click", losowanie);
+    </script>
+</body>
+
+</html>
